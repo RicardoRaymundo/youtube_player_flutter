@@ -41,11 +41,12 @@ class _MyHomePageState extends State<MyHomePage> {
   var _idController = TextEditingController();
   var _seekToController = TextEditingController();
   double _volume = 100;
-  bool _muted = false;
+  bool _muted = true;
   String _playerStatus = "";
   String _errorCode = '0';
 
   String _videoId = "u4O8wE0gYO0";
+
   // iLnmTe5Q2Qw <<<< video anterior
 
   void listener() {
@@ -68,6 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return YoutubeScaffold(
+      //faz o video preencher a tela quando virar o celular na horizontal
       fullScreenOnOrientationChange: true,
       child: Scaffold(
         appBar: AppBar(
@@ -82,6 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 color: Colors.white,
               ),
               onPressed: () async {
+                //Navega para a pagina VideoList
                 await Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => VideoList()),
@@ -94,11 +97,13 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             children: <Widget>[
               YoutubePlayer(
+                //Player principal de video
                 context: context,
                 videoId: _videoId,
                 flags: YoutubePlayerFlags(
+                  //Configurações do player de video
                   mute: false,
-                  autoPlay: true,
+                  autoPlay: false,
                   forceHideAnnotation: true,
                   showVideoProgressIndicator: true,
                   disableDragSeek: false,
@@ -107,6 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 actions: <Widget>[
                   IconButton(
                     icon: Icon(
+                      //Aparece na tela cheia
                       Icons.arrow_back_ios,
                       color: Colors.white,
                       size: 20.0,
@@ -114,6 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     onPressed: () {},
                   ),
                   Text(
+                    //Titulo da tela do video
                     'Hello! This is a test title.',
                     style: TextStyle(
                       color: Colors.white,
@@ -123,6 +130,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   Spacer(),
                   IconButton(
                     icon: Icon(
+                      //Icone de configuracoes do player
                       Icons.settings,
                       color: Colors.white,
                       size: 25.0,
@@ -148,29 +156,24 @@ class _MyHomePageState extends State<MyHomePage> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     TextFormField(
+                      //Campo para inserir link ou ID de video
                       controller: _idController,
                       decoration: InputDecoration(
-                          border: OutlineInputBorder(),
+                          border: OutlineInputBorder(), //borda da caixa de input
                           hintText: "Enter youtube \<video id\> or \<link\>"),
                     ),
                     SizedBox(
                       height: 10.0,
                     ),
                     InkWell(
+                      //Detector de click para confirmar o ID do video
                       onTap: () {
                         setState(() {
-                          //_videoId = _idController.text;
-                          _videoId = 'G0o7y0x_cVI';
-                          print('KKKKKKKKKKKKKKKKKKKKKKKKKKK');
-                          print(_videoId);
-                          print('XXXXXXXXXXXXXXXXXXXXXXX');
-                          // If text is link then converting to corresponding id.
-
+                          _videoId = _idController.text;
+                          // Se o texto é um link, converte para ID
                           if (_videoId.contains("http")) {
                             _videoId = YoutubePlayer.convertUrlToId(_videoId);
-
                           }
-
                         });
                       },
                       child: Container(
@@ -189,15 +192,18 @@ class _MyHomePageState extends State<MyHomePage> {
                       height: 10.0,
                     ),
                     Row(
+                      //Linha de icones de pause, mute e tela cheia
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
                         IconButton(
                           icon: Icon(
+                            //altera o icone para pausado ou rodando
                             _controller.value.isPlaying
                                 ? Icons.play_arrow
                                 : Icons.pause,
                           ),
                           onPressed: () {
+                            //Alterna o video para pausado ou rodando
                             _controller.value.isPlaying
                                 ? _controller.pause()
                                 : _controller.play();
@@ -224,8 +230,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       height: 10.0,
                     ),
                     TextField(
+                      //Campo para selecionar o minuto desejado do video
                       controller: _seekToController,
-                      keyboardType: TextInputType.number,
+                      keyboardType: TextInputType.number, //Ativa teclado de numeros
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         hintText: "Seek to seconds",
@@ -233,8 +240,10 @@ class _MyHomePageState extends State<MyHomePage> {
                           padding: EdgeInsets.all(5.0),
                           child: OutlineButton(
                             child: Text("Seek"),
+                            //Função que procura o tempo determinado pelo controlador
                             onPressed: () => _controller.seekTo(
                                   Duration(
+                                    //converte o texto do input para int
                                     seconds: int.parse(_seekToController.text),
                                   ),
                                 ),
@@ -246,6 +255,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       height: 10.0,
                     ),
                     Row(
+                      //Linha de controle do volume
                       children: <Widget>[
                         Text(
                           "Volume",
@@ -253,12 +263,14 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                         Expanded(
                           child: Slider(
+                            //Responsavel por controlar o volume
                             inactiveColor: Colors.transparent,
                             value: _volume,
                             min: 0.0,
                             max: 100.0,
                             divisions: 10,
                             label: '${(_volume).round()}',
+                            //altera o valor de volume
                             onChanged: (value) {
                               setState(() {
                                 _volume = value;
@@ -272,6 +284,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     Padding(
                       padding: EdgeInsets.all(8.0),
                       child: Text(
+                        //Mostra o stado atual do video (Playing, Buffering, Paused...)
                         "Status: $_playerStatus",
                         style: TextStyle(
                           fontWeight: FontWeight.w300,
@@ -282,6 +295,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     Padding(
                       padding: EdgeInsets.all(8.0),
                       child: Text(
+                        //Mostra o codigo dos erros
                         "Error Code: $_errorCode",
                         style: TextStyle(
                           fontWeight: FontWeight.w300,
@@ -301,6 +315,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _showThankYouDialog() {
     showDialog(
+      //Mostra caixa de dialogo ao fim do video
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(

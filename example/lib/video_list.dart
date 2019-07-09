@@ -8,11 +8,12 @@ class VideoList extends StatefulWidget {
 
 class _VideoListState extends State<VideoList> {
   var videoIds = <String>[
-    "BBAyRBTfsOU",
-    "7QUtEmBT_-w",
-    "QbSzrWYqNRg",
-    "nONOGLMzXjc",
-    "sf3oOx90j9Y",
+    //Lista de IDs de videos
+    "Gb_-rZB2Foc",
+    "FJzZ6zIJZzo",
+    "Gs069dndIYk",
+    "VwBIVWX8YtQ",
+    "l-FxY25lYzY",
   ];
 
   @override
@@ -22,6 +23,7 @@ class _VideoListState extends State<VideoList> {
         title: Text("Video List"),
       ),
       body: ListView.separated(
+        //Cria lista de videos declarados acima
         itemBuilder: (context, index) => YoutubePlayer(
               key: UniqueKey(),
               context: context,
