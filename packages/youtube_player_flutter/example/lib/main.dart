@@ -23,6 +23,7 @@ void main() {
 
 /// Creates [YoutubePlayerDemoApp] widget.
 class YoutubePlayerDemoApp extends StatelessWidget {
+  /// MAIS UM COMENTARIO REBASE02
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
